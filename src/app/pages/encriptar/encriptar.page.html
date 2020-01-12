@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Encriptar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="formEncriptar" #formEn="ngForm" (ngSubmit)="encriptar()">
+    <ion-item>
+      <ion-label position="floating">Secure Key</ion-label>
+      <ion-input formControlName="secureKey"></ion-input>   
+
+      <ion-note 
+      *ngIf="formEn.submitted && formEncriptar.get('secureKey').errors?.required"
+      color="danger" class="input-error">Este campo es requerido.</ion-note>   
+
+      <ion-note 
+      *ngIf="formEn.submitted && formEncriptar.get('secureKey').errors?.minlength"
+      color="danger" class="input-error">
+        Por lo menos {{ formEncriptar.get('secureKey').errors.minlength.requiredLength }} caracteres.
+      </ion-note> 
+
+      <ion-note 
+      *ngIf="formEncriptar.get('secureKey').errors?.noHugo"
+      color="danger" class="input-error">No es permitigo 'hugo' en este campo.</ion-note> 
+    </ion-item>
+  
+    <ion-item >
+      <ion-label position="floating">Secure IV</ion-label>
+      <ion-input formControlName="secureIV"></ion-input>
+
+      <ion-note 
+      *ngIf="formEn.submitted && formEncriptar.get('secureIV').errors?.required"
+      color="danger" class="input-error">Este campo es requerido.</ion-note>   
+
+      <ion-note 
+      *ngIf="formEn.submitted && formEncriptar.get('secureIV').errors?.minlength"
+      color="danger" class="input-error">
+        Por lo menos {{ formEncriptar.get('secureIV').errors.minlength.requiredLength }} caracteres.
+      </ion-note> 
+    </ion-item>
+  
+    <ion-item>
+      <ion-label position="floating">Texto a Encriptar</ion-label>
+      <ion-input formControlName="textoOriginal"></ion-input>
+
+      <ion-note 
+      *ngIf="formEn.submitted && formEncriptar.get('textoOriginal').errors?.required"
+      color="danger" class="input-error">Este campo es requerido.</ion-note>  
+    </ion-item>
+  
+    <ion-button type="submit" color="primary" expand="block" fill="outline" size="large">
+      <ion-icon slot="start" name="lock"></ion-icon>
+      Encriptar
+    </ion-button>
+  </form>
+
+
+  <form [formGroup]="formDesencriptar" #formDes="ngForm" (ngSubmit)="desencriptar()">
+    <ion-item>
+      <ion-label position="floating">Texto encriptado</ion-label>
+      <ion-textarea formControlName="textoEncriptado" rows="2"></ion-textarea>
+    </ion-item>
+
+    
+    <ion-button type="submit" color="secondary" expand="block" fill="outline" size="large">
+      <ion-icon slot="start" name="unlock"></ion-icon>Desencriptar
+    </ion-button>    
+  </form>
+
+
+  <ion-text>
+    <h3 class="m-3">Texto desencriptado:</h3>
+  </ion-text>
+
+  <ion-text>
+    <p class="m-3">
+      {{ textoDesencriptado }}
+    </p>
+  </ion-text>
+</ion-content>
