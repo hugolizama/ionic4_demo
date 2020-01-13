@@ -46,8 +46,8 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
-      this.apiKiuvox.setInternet(true);
-      this.testNoInternet();
+      /*this.apiKiuvox.setInternet(true);
+      this.testNoInternet();*/
     });
   }
 

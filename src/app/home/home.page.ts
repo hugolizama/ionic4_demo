@@ -1,21 +1,38 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApiKiuvoxService } from '../services/api-kiuvox.service';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
 
-  conexionInternet: any;
+  conexionInternet: boolean;
+  algo: string;
 
   constructor(private apiKiuvox: ApiKiuvoxService) {
-    this.apiKiuvox.getEstadoInternet()
-      .subscribe((resp => {
+  }
+
+  ngOnInit() {
+    /*this.apiKiuvox.getEstadoInternet()
+    .pipe(debounceTime(300))
+      .subscribe((resp: boolean) => {
         this.conexionInternet = resp;
-        console.log(this.conexionInternet);
-      }));
+        this.algo = (resp === true) ? 'SI' : 'NO';
+        console.log(this.algo);
+        console.log(resp);
+      });*/
+
+      this.apiKiuvox
+        .getEstadoInternet()
+        .subscribe({
+          next(algo) {
+            this.conexionInternet = algo;
+            console.log(algo);
+          }
+        });
   }
 
 }
