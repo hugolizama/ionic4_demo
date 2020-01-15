@@ -1,43 +1,58 @@
 import { Injectable } from '@angular/core';
-import { Network } from '@ionic-native/network/ngx';
-import { Observable, merge } from 'rxjs';
-import { map, mapTo } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+import { Post } from '../interfaces/post.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiKiuvoxService {
 
-  urlApiBase = 'http://kiuvox.com/wp-json';
-  urlAp = `${this.urlApiBase}/wp/v2`;
-  conexionInternet$: Observable<boolean> = undefined;
+  private urlApiBase = 'http://kiuvox.com/wp-json';
+  private urlApi = `${this.urlApiBase}/wp/v2`;
+  private dataPost: Post[] = [];
 
-  constructor(private network: Network) {
-    this.conexionInternet$ = new Observable((observer) => {
-      observer.next(true);
-    }).pipe(mapTo(true));
+  constructor(private http: HttpClient) {}
 
-    this.conexionInternet$ = merge(
-      this.network.onConnect().pipe(mapTo(true)),
-      this.network.onDisconnect().pipe(mapTo(false))
-    );
+  private getHeaders(): HttpHeaders {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
 
-    console.log('Servicio inyectado');
+    return headers;
+  }
+
+  getPosts() {
+    const url = `${this.urlApi}/posts?_embed`;
+
+    return this.http.get(url, {headers: this.getHeaders() })
+      .pipe(
+        map((resp: any) => {
+          const posts: Post[] = [];
+
+          for (const post of resp) {
+            const tmpPost = {
+              id: post.id,
+              titulo: post.title.rendered,
+              imagen_pequena: post._embedded['wp:featuredmedia']['0'].media_details.sizes.featured.source_url,              
+              contenido: post.content.rendered,
+              resumen: post.excerpt.rendered
+            };
+
+            posts.push(tmpPost);
+          }
+
+          return posts;
+        })
+      );
   }
 
 
-  setInternet(estado: boolean) {
+  setDataPost(id: number, post: Post) {
+    this.dataPost[id] = post;
   }
 
-  getEstadoInternet(): Observable<boolean> {
-    return this.conexionInternet$;
-  }
-
-  testNoInternet() {
-   return this.network.onDisconnect();
-  }
-
-  testInternet() {
-    return this.network.onConnect();
+  getDataPost(id: number) {
+    return this.dataPost[id];
   }
 }

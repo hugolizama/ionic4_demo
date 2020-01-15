@@ -32,12 +32,15 @@
               }
             ],
             "styles": [
+              {"input": "src/assets/fa5/css/all.min.css" },
+              {"input": "src/assets/css/animate.css" },
               {
                 "input": "src/theme/variables.scss"
               },
               {
                 "input": "src/global.scss"
-              }
+              },
+              
             ],
             "scripts": []
           },

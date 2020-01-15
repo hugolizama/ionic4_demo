@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 
-import { Platform } from '@ionic/angular';
+import { Platform, AlertController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { ApiKiuvoxService } from './services/api-kiuvox.service';
+import { InternetService } from './services/internet.service';
 
 @Component({
   selector: 'app-root',
@@ -12,70 +12,75 @@ import { ApiKiuvoxService } from './services/api-kiuvox.service';
 })
 export class AppComponent {
   public appPages = [
-    {
-      title: 'Home',
-      url: '/home',
-      icon: 'home'
-    },
-    {
-      title: 'List',
-      url: '/list',
-      icon: 'list'
-    },
-    {
-      title: 'Encriptar',
-      url: '/encriptar',
-      icon: 'lock'
-    }
+    { title: 'Home', url: '/home', icon: 'home', direction: 'root' },
+    { title: 'Encriptar', url: '/encriptar', icon: 'lock', direction: 'forward' },
+    { title: 'Blog', url: '/blog', icon: 'paper', direction: 'forward' },
+    { title: 'Camara', url: '/camara', icon: 'camera', direction: 'forward' },
+    { title: 'Enviar correo', url: '/correo', icon: 'mail', direction: 'forward' },
+
   ];
 
-  noInternet: any;
-  siInternet: any;
+  sinConexion: any;
+  conConexion: any;
 
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private apiKiuvox: ApiKiuvoxService
+    public alertController: AlertController,
+    private internetService: InternetService
   ) {
     this.initializeApp();
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
+      this.statusBar.styleLightContent();
       this.splashScreen.hide();
 
-      /*this.apiKiuvox.setInternet(true);
-      this.testNoInternet();*/
+      // Segu el estado de la conexion iniciar una prueba
+      if (navigator.onLine) {
+        this.pruebaDesconexionInternet();
+      } else {
+        this.pruebaConexionInternet();
+      }
     });
   }
 
-  testNoInternet() {
-    if (this.siInternet !== undefined) {
-      this.siInternet.unsubscribe();
+  /** Funcion para iniciar la prueba de desconexion de internet */
+  pruebaDesconexionInternet() {
+    if (this.conConexion !== undefined) {
+      this.conConexion.unsubscribe();
     }
 
-    this.noInternet = this.apiKiuvox.testNoInternet()
+    this.sinConexion = this.internetService.pruebaDesconexionInternet()
         .subscribe((resp) => {
-          console.error('Se fue el internet!!');
-          this.apiKiuvox.setInternet(false);
-
-          this.testInternet();
+          this.internetService.setEstadoConexionInternet(false);
+          this.crearAlerta('No hay Internet');
+          this.pruebaConexionInternet();
         });
   }
 
-  testInternet() {
-    if (this.noInternet !== undefined) {
-      this.noInternet.unsubscribe();
+  pruebaConexionInternet() {
+    if (this.sinConexion !== undefined) {
+      this.sinConexion.unsubscribe();
     }
 
-    this.siInternet = this.apiKiuvox.testInternet()
+    this.conConexion = this.internetService.pruebaConexionInternet()
       .subscribe((resp) => {
-        console.log('Regreso el internet!!');
-        this.apiKiuvox.setInternet(true);
-
-        this.testNoInternet();
+        this.internetService.setEstadoConexionInternet(true);
+        this.crearAlerta('Regreso Internet');
+        this.pruebaDesconexionInternet();
       });
+  }
+
+  async crearAlerta(mensaje: any) {
+    const alert = await this.alertController.create({
+      header: 'Notificación',
+      message: mensaje,
+      buttons: ['OK']
+    });
+
+    await alert.present();
   }
 }

@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ post.titulo }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-text>
+    <h2>{{ post.titulo }}</h2>
+  </ion-text>
+
+  <ion-text>
+    <p [innerHTML]="post.contenido"></p>
+  </ion-text>
+</ion-content>

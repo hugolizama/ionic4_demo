@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ApiKiuvoxService } from '../services/api-kiuvox.service';
-import { debounceTime } from 'rxjs/operators';
+import { Component, OnInit, NgZone } from '@angular/core';
+import { InternetService } from '../services/internet.service';
 
 @Component({
   selector: 'app-home',
@@ -9,30 +8,18 @@ import { debounceTime } from 'rxjs/operators';
 })
 export class HomePage implements OnInit {
 
-  conexionInternet: boolean;
-  algo: string;
+  conexionInternet: boolean = undefined;
 
-  constructor(private apiKiuvox: ApiKiuvoxService) {
+  constructor(public internetService: InternetService, private ngZone: NgZone) {
+    this.internetService.getEstadoConexionInternet()
+      .subscribe((resp) => {
+        this.ngZone.run(() => {
+          this.conexionInternet = resp;
+          console.log(this.conexionInternet);
+        });
+      });
   }
 
   ngOnInit() {
-    /*this.apiKiuvox.getEstadoInternet()
-    .pipe(debounceTime(300))
-      .subscribe((resp: boolean) => {
-        this.conexionInternet = resp;
-        this.algo = (resp === true) ? 'SI' : 'NO';
-        console.log(this.algo);
-        console.log(resp);
-      });*/
-
-      this.apiKiuvox
-        .getEstadoInternet()
-        .subscribe({
-          next(algo) {
-            this.conexionInternet = algo;
-            console.log(algo);
-          }
-        });
   }
-
 }

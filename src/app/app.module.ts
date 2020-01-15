@@ -11,19 +11,33 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { Network } from '@ionic-native/network/ngx';
 
+import { HttpClientModule } from '@angular/common/http';
+
+// servicios
+import { ApiKiuvoxService } from './services/api-kiuvox.service';
+
+// imports
+import { Camera } from '@ionic-native/camera/ngx';
+
+
+
 @NgModule({
   declarations: [AppComponent],
-  entryComponents: [],
+  entryComponents: [
+  ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    Network
+    ApiKiuvoxService,
+    Network,
+    Camera
   ],
   bootstrap: [AppComponent]
 })
