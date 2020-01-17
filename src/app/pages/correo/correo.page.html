@@ -8,15 +8,22 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-button expand="block" size="large" color="primary" text-capitalize="false" class="mb-3">
+  <ion-button (click)="capturarImagen()" expand="block" size="large" color="primary" class="mb-3 ion-text-capitalize">
     <span class="fa fa-camera mr-2"></span> Tomar im&aacute;gen
   </ion-button>
 
-  <ion-button  expand="block" size="large" color="secondary" text-capitalize="false" class="mb-3">
+  <ion-button (click)="seleccionarImagen()"  expand="block" size="large" color="secondary" class="mb-3 ion-text-capitalize">
     <span class="fa fa-image mr-2"></span> Seleccionar im&aacute;gen
   </ion-button>
 
-  <ion-button  expand="block" size="large" color="tertiary" text-capitalize="false" class="mb-3">
+  <ion-button (click)="enviarCorreo()" expand="block" size="large" color="tertiary" class="mb-3 ion-text-capitalize">
     <span class="fa fa-envelope mr-2"></span> Enviar correo
   </ion-button>
+
+  <ion-card *ngIf="imagen">
+    <ion-card-header>Previsualizar im&aacute;gen</ion-card-header>
+    <ion-card-content>
+      <img [src]="mostrarImagen" />
+    </ion-card-content>
+  </ion-card>
 </ion-content>

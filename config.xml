@@ -3,7 +3,7 @@
     <name>Ionic 4 Ejercicios</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework.com" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content original-src="index.html" src="http://192.168.23.2:8100" />
+    <content original-src="index.html" src="http://192.168.23.1:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -102,5 +102,9 @@
     <plugin name="cordova-plugin-aes256-encryption" spec="2.0.0" />
     <plugin name="cordova-plugin-network-information" spec="2.0.2" />
     <allow-navigation href="http://192.168.23.2:8100" sessionid="ddc8afb5" />
+    <plugin name="cordova-plugin-email-composer" spec="0.9.2">
+        <variable name="ANDROID_SUPPORT_V4_VERSION" value="27.+" />
+    </plugin>
+    <allow-navigation href="http://192.168.23.1:8100" sessionid="af9f001e" />
     <engine name="android" spec="7.1.4" />
 </widget>

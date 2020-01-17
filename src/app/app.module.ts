@@ -9,15 +9,17 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { Network } from '@ionic-native/network/ngx';
-
+// imports
 import { HttpClientModule } from '@angular/common/http';
 
 // servicios
 import { ApiKiuvoxService } from './services/api-kiuvox.service';
+import { MensajeToastService } from './services/mensaje-toast.service';
 
-// imports
+// componentes
+import { Network } from '@ionic-native/network/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
+import { EmailComposer } from '@ionic-native/email-composer/ngx';
 
 
 
@@ -36,8 +38,10 @@ import { Camera } from '@ionic-native/camera/ngx';
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     ApiKiuvoxService,
+    MensajeToastService,
     Network,
-    Camera
+    Camera,
+    EmailComposer
   ],
   bootstrap: [AppComponent]
 })
